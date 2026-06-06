@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Kay-Link</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- LOGIN -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo"><img src="logos/kay-wordmark.png" alt="Kay" style="width:180px;height:auto" /></div>
+      <div class="login-sub">Masuk untuk melanjutkan</div>
+      <input id="login-user" placeholder="Username" autocapitalize="none" autocomplete="username" />
+      <input id="login-pass" type="password" placeholder="Password" autocomplete="current-password" />
+      <button class="btn" id="login-btn">Masuk</button>
+      <div id="login-err" class="login-err"></div>
+      <details class="login-cfg">
+        <summary>Pengaturan koneksi (sekali per device)</summary>
+        <input id="login-base" placeholder="URL Worker Backend" />
+        <input id="login-token" type="password" placeholder="Token backend (admin/staff)" />
+        <button class="btn outline" id="login-save-cfg">Simpan Koneksi</button>
+        <div id="login-cfg-status" class="hint"></div>
+      </details>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <div style="flex:1">
+      <h1 id="header-title">Kay-Link</h1>
+      <div class="sub" id="header-sub">Pencatatan keuangan</div>
+    </div>
+    <button id="btn-logout" class="hdr-btn" title="Keluar">Keluar</button>
+  </header>
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div id="dashboard-content"><div class="loading-box"><div class="spinner"></div>Memuat…</div></div>
+  </section>
+
+  <!-- TRANSAKSI -->
+  <section id="view-scan" class="view">
+    <div class="card">
+      <h2>🧾 TRANSAKSI</h2>
+      <img id="scan-preview" class="preview-img" style="display:none" alt="preview" />
+      <div id="scan-pages-hint" class="hint" style="display:none;margin-top:8px"></div>
+      <div class="btn-row">
+        <button class="btn" id="btn-camera">📸 Kamera</button>
+        <button class="btn secondary" id="btn-gallery">🖼️ Galeri</button>
+      </div>
+      <div class="hint">Catat pemasukan maupun pengeluaran secara otomatis (foto) dan manual.</div>
+      <div style="text-align:center;color:var(--muted);font-size:12px;margin:12px 0 8px">— atau —</div>
+      <button class="btn outline" id="btn-manual">✍️ Input Manual (tanpa foto)</button>
+    </div>
+    <div id="scan-result"></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="view-history" class="view">
+    <div id="history-content"><div class="loading-box"><div class="spinner"></div>Memuat…</div></div>
+  </section>
+
+  <!-- ABSENSI -->
+  <section id="view-absensi" class="view">
+    <div class="seg" id="absensi-seg"></div>
+    <div id="absensi-content"></div>
+  </section>
+
+  <!-- MASTER DATA -->
+  <section id="view-master" class="view">
+    <div class="card">
+      <div class="row-between"><h2>📁 Projects</h2><button class="btn small" id="btn-add-project">+ Tambah</button></div>
+      <div id="master-projects"></div>
+    </div>
+    <div class="card">
+      <div class="row-between"><h2>🏷️ Kategori Pencatatan</h2><button class="btn small" id="btn-add-category">+ Tambah</button></div>
+      <div id="master-categories"></div>
+    </div>
+    <div class="card">
+      <div class="row-between"><h2>👷 Karyawan</h2><button class="btn small" id="btn-add-employee">+ Tambah</button></div>
+      <div id="master-employees"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="view-settings" class="view">
+    <div class="card">
+      <h2>⚙️ Koneksi Backend</h2>
+      <label class="field"><span>URL Worker Backend</span>
+        <input id="cfg-base" placeholder="https://kay-link-backend...workers.dev" /></label>
+      <label class="field"><span>BACKEND_TOKEN</span>
+        <input id="cfg-token" type="password" placeholder="token rahasia" /></label>
+      <div class="btn-row">
+        <button class="btn" id="btn-save-cfg">Simpan</button>
+        <button class="btn outline" id="btn-test-cfg">Tes Koneksi</button>
+      </div>
+      <div id="cfg-status" class="hint"></div>
+    </div>
+    <div class="card">
+      <h2>⏱️ Opsi Rate Lembur (per jam)</h2>
+      <label class="field"><span>Daftar pilihan rate (pisahkan koma)</span>
+        <input id="cfg-ot-rates" placeholder="10000, 15000, 20000, 25000" /></label>
+      <button class="btn" id="btn-save-ot">Simpan Opsi Rate</button>
+      <div id="ot-status" class="hint"></div>
+    </div>
+    <div class="card">
+      <h2>☁ Sinkronisasi Sheets</h2>
+      <p class="hint" style="margin-bottom:10px">Dorong semua Project, Kategori, & Karyawan (termasuk rate gaji) yang sudah ada ke Google Sheets.</p>
+      <button class="btn" id="btn-sync-master">Sync Master Data ke Sheet</button>
+      <div id="syncm-status" class="hint"></div>
+    </div>
+    <div class="card">
+      <h2>ℹ️ Tentang</h2>
+      <p class="hint">Kay-Link PWA v1.0 — scan struk → Gemini → Supabase + Google Sheets.<br/>Data tersimpan di server backend-mu sendiri.</p>
+      <button class="btn outline" id="btn-install" style="display:none">⬇️ Install ke Home Screen</button>
+    </div>
+  </section>
+
+  <!-- FAB -->
+  <button class="fab" id="fab-scan" title="Scan">＋</button>
+
+  <!-- BOTTOM NAV -->
+  <nav class="nav">
+    <button data-view="dashboard" class="active"><span class="ico">📊</span>Dashboard</button>
+    <button data-view="scan"><span class="ico">🧾</span>Transaksi</button>
+    <button data-view="absensi"><span class="ico">👷</span>Absensi</button>
+    <button data-view="history"><span class="ico">🧾</span>Riwayat</button>
+    <button data-view="master"><span class="ico">📁</span>Data</button>
+    <button data-view="settings"><span class="ico">⚙️</span>Setting</button>
+  </nav>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modal-bg"><div class="modal" id="modal"></div></div>
+
+  <!-- hidden file inputs -->
+  <input type="file" id="file-camera" accept="image/*" capture="environment" style="display:none" />
+  <input type="file" id="file-gallery" accept="image/png,image/jpeg" multiple style="display:none" />
+
+  <!-- stage off-screen untuk render slip sebelum di-capture -->
+  <div id="export-stage"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
