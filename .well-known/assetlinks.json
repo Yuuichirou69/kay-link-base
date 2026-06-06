@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kaylink.app",
+      "sha256_cert_fingerprints": [
+        "56:F3:4D:F4:C4:8A:AE:22:48:1C:17:01:8C:3D:8A:74:38:58:B1:72:A7:AC:E4:C4:8C:E6:E7:7F:0F:7A:34:97"
+      ]
+    }
+  }
+]
